@@ -31,13 +31,17 @@ const Card = (article) => {
   author1.classList.add('author')
   imageContainer.classList.add('img-container')
 
-headline1.textContent = article
+  headline1.textContent = article.headline
+  image.src = article.authorPhoto
+  authorName1.textContent = `By ${article.authorName}` 
 
   card1.appendChild(headline1)
   card1.appendChild(author1)
   author1.appendChild(imageContainer)
   imageContainer.appendChild(image)
   author1.appendChild(authorName1)
+  
+  return card1  
 }
 
 const cardAppender = (selector) => {
@@ -49,10 +53,40 @@ const cardAppender = (selector) => {
   // Create a card from each and every article object in the response, using the Card component.
   // Append each card to the element in the DOM that matches the selector passed to the function.
   //
+  const cards = document.querySelector(selector)
+
   axios.get('https://lambda-times-api.herokuapp.com/articles')
   .then((res)=>{
-    console.log(res.data)
-  })
+    console.log(res.data.articles)
+    const bootstrap = res.data.articles.bootstrap
+    const javascript = res.data.articles.javascript
+    const jquery = res.data.articles.jquery
+    const node = res.data.articles.node
+    const technology = res.data.articles.technology
+
+    bootstrap.forEach(article => {
+      const card = Card(article)
+      console.log(card)
+      cards.appendChild(card)
+
+    });
+    javascript.forEach(article =>{
+      const card = Card(article)
+      cards.appendChild(card)
+      });
+    jquery.forEach(article =>{
+      const card = Card(article)
+      cards.appendChild(card)
+    });
+    node.forEach(article =>{
+      const card = Card(article)
+      cards.appendChild(card)
+    });
+    technology.forEach(article =>{
+      const card = Card(article)
+      cards.appendChild(card)
+    });
+  }).catch((err)=>console.log(err))
 }
 
 export { Card, cardAppender }
